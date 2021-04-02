@@ -1,6 +1,6 @@
 <?php
 // Je hebt een database nodig om dit bestand te gebruiken....
-require 'database.php';
+include 'database.php';
 if (!isset($db_conn)) { //deze if-statement checked of er een database-object aanwezig is. Kun je laten staan.
     return;
 }
@@ -9,25 +9,25 @@ $database_gegevens = null;
 $poolIsChecked = false;
 $bathIsChecked = false;
 
-$sql = ""; //Selecteer alle huisjes uit de database
+$sql = "Select * FROM homes"; //Selecteer alle huisjes uit de database
 
 if (isset($_GET['filter_submit'])) {
 
     if ($_GET['faciliteiten'] == "ligbad") { // Als ligbad is geselecteerd filter dan de zoekresultaten
         $bathIsChecked = true;
 
-        $sql = ""; // query die zoekt of er een BAD aanwezig is.
+        $sql = "SELECT bath_present FROM homes"; // query die zoekt of er een BAD aanwezig is.
     }
 
     if ($_GET['faciliteiten'] == "zwembad") {
         $poolIsChecked = true;
 
-        $sql = ""; // query die zoekt of er een ZWEMBAD aanwezig is.
+        $sql = "SELECT `pool_present` FROM `homes`"; // query die zoekt of er een ZWEMBAD aanwezig is.
     }
 }
 
 
-if (is_object($db_conn->query($sql))) { //deze if-statement controleert of een sql-query correct geschreven is en dus data ophaalt uit de DB
+if (is_object($db_conn->query($sql))) { //deze if-statemeschrnt controleert of een sql-query correct geeven is en dus data ophaalt uit de DB
     $database_gegevens = $db_conn->query($sql)->fetchAll(PDO::FETCH_ASSOC); //deze code laten staan
 }
 
@@ -50,7 +50,7 @@ if (is_object($db_conn->query($sql))) { //deze if-statement controleert of een s
 
 <body>
     <header>
-        <h1>Quattro Cottage Rental</h1>
+        <h1>Hier kan jij je geld verspillen aan een vervelend weekend!!!</h1>
     </header>
     <main>
         <div class="left">
@@ -152,13 +152,17 @@ if (is_object($db_conn->query($sql))) { //deze if-statement controleert of een s
     <script>
         // De verschillende markers moeten geplaatst worden. Vul de longitudes en latitudes uit de database hierin
         var coordinates = [
-
-
+            ["52.44902", "4.61001"],
+            ["52.99864", "6.64928"],
+            ["52.30340", "6.36800"],
+            ["50.89720", "5.90979"]
         ];
 
         var bubbleTexts = [
-
-
+            "<h2>IJmuiden Cottage</h2>",
+            "<h2>Assen Bungalow</h2>",
+            "<h2>Espelo Entree</h2>",
+            "<h2>Weustenrade Woning</h2>"
         ];
     </script>
     <script src="js/place_markers.js"></script>
