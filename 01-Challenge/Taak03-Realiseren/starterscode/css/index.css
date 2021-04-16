@@ -1,7 +1,7 @@
 #mapid {
     display: block;
-    height: 600px;
-    width: 650px;
+    height: 550px;
+    width: 98%;
 }
 
 main {
@@ -9,12 +9,12 @@ main {
 }
 
 main .left{
-    width: 80%;
+    width: 65%;
 }
 
 main .right {
     margin-left: 20px;
-    width: 50%;
+    width: 35%;
 }
 
 .homes-box{
@@ -24,6 +24,8 @@ main .right {
     align-items: flex-start;
     float: left;
     width: 100%;
+    overflow: hidden;
+    padding-left: 2px;
 }
 
 .right .filter-box .homes-box {
@@ -40,7 +42,7 @@ footer {
     width: 100%;
     align-items: center;
     justify-content: center;
-    border-top: 1px solid blue;
+    border-top: 1px solid #264653;
 }
 
 footer div {
@@ -93,6 +95,7 @@ footer div {
     background-color: #E9C46A;
     justify-items: right;   
     transform: rotate(60deg);   
+    box-shadow: #264653 10px 10px;
 }
 
 .book{
@@ -116,4 +119,28 @@ p{
     display: flex;
     justify-content: first baseline;
     align-items:flex-start;
+}
+
+.schuinelijn{
+    display: flex;
+    height: 100px;
+    width: 100%;
+    background-color: #2A9D8F;
+    justify-content: right;
+    float: right;
+    margin-top: -5%;
+    margin-right: -40%;
+    transform: rotate(140deg);
+    box-shadow: #264653 10px 10px;
+}
+
+.kenmerken{
+    overflow: hidden;
+}
+
+.naam{
+    color: #F4A261;
+    font-size: 60px;
+    text-shadow: #264653 2px 2px;
+    -webkit-text-stroke: 1px #264653;
 }

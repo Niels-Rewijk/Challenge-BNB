@@ -17,29 +17,30 @@ $sql = "Select * FROM homes"; //Selecteer alle huisjes uit de database
 if (isset($_GET['filter_submit'])) {
     if ($_GET['faciliteiten'] == "ligbad") { // Als ligbad is geselecteerd filter dan de zoekresultaten
         $bathIsChecked = true;
-        $sql = "SELECT bath_present FROM homes"; // query die zoekt of er een BAD aanwezig is.
+        $sql = "SELECT * FROM homes WHERE bath_present = 1"; // query die zoekt of er een BAD aanwezig is.
     }
     if ($_GET['faciliteiten'] == "zwembad") {
         $poolIsChecked = true;
-        $sql = "SELECT `pool_present` FROM `homes`"; // query die zoekt of er een ZWEMBAD aanwezig is.
+        $sql = "SELECT * FROM homes WHERE pool_present = 1"; // query die zoekt of er een ZWEMBAD aanwezig is.
     }
-    if ($_GET['faciliteiten'] == "Bbq") {
+    if ($_GET['faciliteiten'] == "bbq") {
         $bbqIsChecked = true;
-        $sql = "SELECT `bbq_present` FROM `homes`"; // query die zoekt of er een bbq aanwezig is.
+        $sql = "SELECT * FROM homes WHERE bbq_present = 1"; // query die zoekt of er een bbq aanwezig is.
     }
-    if ($_GET['faciliteiten'] == "Vuurplaats") {
+    if ($_GET['faciliteiten'] == "vuurplaats") {
         $fireplaceIsChecked = true;
-        $sql = "SELECT `fireplace_present` FROM `homes`"; // query die zoekt of er een fireplace aanwezig is.
+        $sql = "SELECT * FROM `homes` WHERE `fireplace_present` = 1"; // query die zoekt of er een fireplace aanwezig is.
     }
-    if ($_GET['faciliteiten'] == "Fietsen te huur") {
+    if ($_GET['faciliteiten'] == "fietsen te huur") {
         $bikerentalIsChecked = true;
-        $sql = "SELECT `bike_rental` FROM `homes`"; // query die zoekt of er een bike_rental aanwezig is.
+        $sql = "SELECT * FROM homes WHERE bike_rental = 1"; // query die zoekt of er een bike_rental aanwezig is.
     }
 }
 
 
 if (is_object($db_conn->query($sql))) { //deze if-statemeschrnt controleert of een sql-query correct geeven is en dus data ophaalt uit de DB
     $database_gegevens = $db_conn->query($sql)->fetchAll(PDO::FETCH_ASSOC); //deze code laten staan
+    // echo "<pre>";var_dump($database_gegevens); exit;
 }
 
 
@@ -51,7 +52,7 @@ if (is_object($db_conn->query($sql))) { //deze if-statemeschrnt controleert of e
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>BnB</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
     <!-- Make sure you put this AFTER Leaflet's CSS -->
@@ -62,24 +63,24 @@ if (is_object($db_conn->query($sql))) { //deze if-statemeschrnt controleert of e
 <body>
     <header>
         <div class="menu p-3 border mb-3">
-        <h1>Huur hier zo'n huisje</h1>
+        <h1 class="naam">Huur hier zo'n huisje</h1>
         <div class="driehoek"></div>        
         </div>
     </header>
     <main>
-        <div class="left">
+        <div class="left ">
         <div class="homes-box">
             <?php if (isset($database_gegevens) && $database_gegevens != null) : ?>
                 <?php foreach ($database_gegevens as $huisje) : ?>
-                    <div class="huizen p-3 border shadow mb-5 bg-body rounded">
+                    <div class="huizen p-3 border shadow mb-5 bg-body rounded overflow-hidden">
                     <h4>
                         <?php echo $huisje['name']; ?>
                     </h4>
-
                     <p>
-                        <img src='images/<?php echo $huisje["image"]; ?> ' heigt=50% width=50%x>                      
+                        <img class="plaatjes p-1" src='images/<?php echo $huisje["image"]; ?> ' heigt=50% width=50% >                      
                         <?php echo $huisje['description']; ?>
                     </p>
+                    <div class="schuinelijn"></div> 
                     <div class="kenmerken">
                         <h6>Kenmerken</h6>
                         <ul>                        
@@ -109,10 +110,13 @@ if (is_object($db_conn->query($sql))) { //deze if-statemeschrnt controleert of e
                             }
                             ?>
                         </ul>
+                        
                     </div>
+                    
                     </div>
                 <?php endforeach; ?>
-            <?php endif; ?>                   
+            <?php endif; ?>          
+                    
         </div>     
         </div>
         <div class="right">            
@@ -135,15 +139,15 @@ if (is_object($db_conn->query($sql))) { //deze if-statemeschrnt controleert of e
                     </div>
                     <div class="form-control">
                         <label for="fireplace">Vuurplaats</label>
-                        <input type="radio" id="fireplace" name="faciliteiten" value="fireplace" <?php if ($fireplaceIsChecked) echo 'checked' ?>>
+                        <input type="radio" id="vuurplaats" name="faciliteiten" value="vuurplaats" <?php if ($fireplaceIsChecked) echo 'checked' ?>>
                     </div>
                     <div class="form-control">
                         <label for="bike_rental">Fiets verhuur</label>
-                        <input type="radio" id="bike_rental" name="faciliteiten" value="bike_rental" <?php if ($bikerentalIsChecked) echo 'checked' ?>>
+                        <input type="radio" id="fietsen te huur" name="faciliteiten" value="fietsen te huur" <?php if ($bikerentalIsChecked) echo 'checked' ?>>
                     </div>
                     <button type="submit" name="filter_submit">Filter</button>
                 </form>
-            <div id="mapid"></div>
+                <br></br>
             <div class="book">
                 <h3>Reservering maken</h3>
                 <div class="form-control">
@@ -176,14 +180,16 @@ if (is_object($db_conn->query($sql))) { //deze if-statemeschrnt controleert of e
                 <div class="bookedHome"></div>
                 <div class="totalPriceBlock">Totale prijs &euro;<span class="totalPrice">0.00</span></div>
             </div>
+            <br></br>
             </div>
+            <div id="mapid"></div>
         </div>
 
     </main>
     
     <footer>
         <div></div>
-        <div>copyright Quattro Rentals BV.</div>
+        <div class="d-flex justify-content-center">copyright Quattro Rentals BV.</div>
         <div></div>
 
     </footer>
