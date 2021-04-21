@@ -178,7 +178,8 @@ if (is_object($db_conn->query($sql))) { //deze if-statemeschrnt controleert of e
             </div>
             <div class="currentBooking">
                 <div class="bookedHome"></div>
-                <div class="totalPriceBlock">Totale prijs &euro;<span class="totalPrice">0.00</span></div>
+                <?php $totaalprijs = ("aantal_dagen"*$huisje["price_p_p_p_n"])*"aantal_personen";?>
+                <div class="totalPriceBlock">Totale prijs &euro;<span class="totalPrice"><?php echo $totaalprijs;?></span></div>
             </div>
             <br></br>
             </div>
