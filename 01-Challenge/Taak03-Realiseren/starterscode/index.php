@@ -109,19 +109,22 @@ if (is_object($db_conn->query($sql))) { //deze if-statemeschrnt controleert of e
                                 echo "<li>Je kan fietsen huren!</li>";
                             }
                             ?>
+                            <?php 
+                                echo "<li> &#8364;".$huisje['price_p_p_p_n']. " per persoon per nacht</li>";
+                            ?>
+                            <?php 
+                                echo "<li> Beddengoed kost hier &#8364;".$huisje['price_bed_sheets']. "</li>";
+                            ?>
                         </ul>
-                        
-                    </div>
-                    
+                    </div>                    
                     </div>
                 <?php endforeach; ?>
-            <?php endif; ?>          
-                    
+            <?php endif; ?>                             
         </div>     
         </div>
         <div class="right">            
             <div class="filter-box">
-                <form class="filter-form">
+                <form class="filter-form pb-5">
                     <div class="form-control">
                         <a href="index.php">Reset Filters</a>
                     </div>
@@ -148,9 +151,12 @@ if (is_object($db_conn->query($sql))) { //deze if-statemeschrnt controleert of e
                     <button type="submit" name="filter_submit">Filter</button>
                 </form>
                 <br></br>
+                <div id="mapid"></div> <!--- de map -->
+                <br></br>
             <div class="book">
                 <h3>Reservering maken</h3>
                 <div class="form-control">
+                <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
                     <label for="aantal_personen">Vakantiehuis</label>
                     <select name="gekozen_huis" id="gekozen_huis">
                         <option value="1">IJmuiden Cottage</option>
@@ -158,11 +164,12 @@ if (is_object($db_conn->query($sql))) { //deze if-statemeschrnt controleert of e
                         <option value="3">Espelo Entree</option>
                         <option value="4">Weustenrade Woning</option>
                     </select>
-                </div>
+                </div>                
                 <div class="form-control">
                     <label for="aantal_personen">Aantal personen</label>
                     <input type="number" name="aantal_personen" id="aantal_personen">
                 </div>
+                
                 <div class="form-control">
                     <label for="aantal_dagen">Aantal dagen</label>
                     <input type="number" name="aantal_dagen" id="aantal_dagen">
@@ -174,18 +181,70 @@ if (is_object($db_conn->query($sql))) { //deze if-statemeschrnt controleert of e
                     <label for="beddengoed_nee">Nee</label>
                     <input type="radio" id="beddengoed_nee" name="beddengoed" value="nee">
                 </div>
-                <button>Reserveer huis</button>
+                <button name="bereken">Bereken prijs</button>
+                </form>
+                <button onclick="arm()">Betalen</button>
+                <script>
+                function arm() {
+                    alert("Er staat niet genoeg geld op je rekening");
+                    }
+                </script>
             </div>
             <div class="currentBooking">
                 <div class="bookedHome"></div>
-                <?php $totaalprijs = ("aantal_dagen"*$huisje["price_p_p_p_n"])*"aantal_personen";?>
-                <div class="totalPriceBlock">Totale prijs &euro;<span class="totalPrice"><?php echo $totaalprijs;?></span></div>
-            </div>
-            <br></br>
-            </div>
-            <div id="mapid"></div>
+                <?php 
+                $personen = 0;
+                $dagen = 0;
+                $gekozen_huis = 1;  
+                $prijs_huisje = 0; 
+                $totaal_prijs = 0;
+                $bedden = 0;
+                if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                    $personen = $_POST["aantal_personen"];
+                    if (empty($personen)) {
+                        echo "Gelieve iets in te vullen bij personen! <br>"  ;
+                        $personen = 0;
+                    } 
+                }
+                if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                    $dagen = $_POST["aantal_dagen"];
+                    if (empty($dagen)) {
+                        echo "Gelieve iets in te vullen bij de dagen! <br>";
+                        $dagen = 0;
+                    } 
+                }     
+                if ($_SERVER["REQUEST_METHOD"] == "POST") {// huis kiezen
+                    $gekozen_huis = $_POST["gekozen_huis"];
+                    $sql = "SELECT price_p_p_p_n FROM homes WHERE id = $gekozen_huis"; // query die zoekt naar de prijs per persoon per nacht                   
+                    if (is_object($db_conn->query($sql))) { //deze if-statemeschrnt controleert of een sql-query correct geeven is en dus data ophaalt uit de DB       
+                        $prijs_huisje = $db_conn->query($sql)->fetch(PDO::FETCH_ASSOC); //deze code laten staan
+                        // echo "<pre>";var_dump($database_gegevens); exit;                                               
+                    }             
+                }
+                if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                    $bedden = $_POST["beddengoed"];
+                    if ($bedden == "ja"){
+                        if ($gekozen_huis == 1){
+                            $bedden = 10;
+                        } else {
+                        $bedden = 0;}    
+                    } else
+                    if ($bedden == "nee"){
+                        $bedden = 0;
+                    }
+                    if (empty($bedden)) {
+                        echo "Gelieve iets in te vullen bij beddengoed!";
+                        $bedden = 0;
+                    }
+                }
+                if (isset($_POST['bereken'])) {
+                $totaal_prijs = (($dagen*$prijs_huisje["price_p_p_p_n"]*$personen)+$bedden); 
+                }
+                ?>                 
+                <div class="totalPriceBlock">Totale prijs &#8364;<span class="totalPrice"><?php echo $totaal_prijs;?></span></div>
+            </div>            
+            </div>            
         </div>
-
     </main>
     
     <footer>

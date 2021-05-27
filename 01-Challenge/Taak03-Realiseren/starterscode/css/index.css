@@ -59,6 +59,7 @@ footer div {
     display: block; 
     width: 200px;
     float:none;
+    padding-bottom: 100px;
 }
 
 .form-control{
