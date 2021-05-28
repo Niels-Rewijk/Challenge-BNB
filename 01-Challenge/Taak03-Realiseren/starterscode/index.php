@@ -81,7 +81,7 @@ if (is_object($db_conn->query($sql))) { //deze if-statemeschrnt controleert of e
                         <?php echo $huisje['description']; ?>
                     </p>
                     <div class="schuinelijn"></div> 
-                    <div class="kenmerken">
+                    <div class="kenmerken"> <!-- De kenmerken die onder het huisje staan -->
                         <h6>Kenmerken</h6>
                         <ul>                        
                             <?php
@@ -123,7 +123,7 @@ if (is_object($db_conn->query($sql))) { //deze if-statemeschrnt controleert of e
         </div>     
         </div>
         <div class="right">            
-            <div class="filter-box">
+            <div class="filter-box"> <!-- Het filter -->
                 <form class="filter-form pb-5">
                     <div class="form-control">
                         <a href="index.php">Reset Filters</a>
@@ -155,7 +155,7 @@ if (is_object($db_conn->query($sql))) { //deze if-statemeschrnt controleert of e
                 <br></br>
             <div class="book">
                 <h3>Reservering maken</h3>
-                <div class="form-control">
+                <div class="form-control"> <!-- Het winkelandje -->
                 <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
                     <label for="aantal_personen">Vakantiehuis</label>
                     <select name="gekozen_huis" id="gekozen_huis">
@@ -181,16 +181,16 @@ if (is_object($db_conn->query($sql))) { //deze if-statemeschrnt controleert of e
                     <label for="beddengoed_nee">Nee</label>
                     <input type="radio" id="beddengoed_nee" name="beddengoed" value="nee">
                 </div>
-                <button name="bereken">Bereken prijs</button>
+                <button name="bereken">Bereken prijs</button> <!-- bereken knop -->
                 </form>
-                <button onclick="arm()">Betalen</button>
+                <button onclick="arm()">Betalen</button> <!-- betaal knop -->
                 <script>
                 function arm() {
                     alert("Er staat niet genoeg geld op je rekening");
                     }
                 </script>
             </div>
-            <div class="currentBooking">
+            <div class="currentBooking"> <!-- de berekeningen voor het winkelmandje --> 
                 <div class="bookedHome"></div>
                 <?php 
                 $personen = 0;
