@@ -176,9 +176,9 @@ if (is_object($db_conn->query($sql))) { //deze if-statemeschrnt controleert of e
                 </div>
                 <div class="form-control">
                     <h5>Beddengoed</h5>
-                    <label for="beddengoed_ja">Ja</label>
+                    <h6 class="tekst-beddengoed p-3">Ja</h6>
                     <input type="radio" id="beddengoed_ja" name="beddengoed" value="ja">
-                    <label for="beddengoed_nee">Nee</label>
+                    <h6 class="tekst-beddengoed p-3">Nee</h6>
                     <input type="radio" id="beddengoed_nee" name="beddengoed" value="nee">
                 </div>
                 <button name="bereken">Bereken prijs</button> <!-- bereken knop -->
@@ -221,22 +221,23 @@ if (is_object($db_conn->query($sql))) { //deze if-statemeschrnt controleert of e
                         // echo "<pre>";var_dump($database_gegevens); exit;                                               
                     }             
                 }
-                if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                // echo "<pre>";
+                // print_r($_SERVER);
+                if ( isset($_POST["beddengoed"]) ) {                    
                     $bedden = $_POST["beddengoed"];
                     if ($bedden == "ja"){
                         if ($gekozen_huis == 1){
                             $bedden = 10;
-                        } else {
-                        $bedden = 0;}    
-                    } else
-                    if ($bedden == "nee"){
-                        $bedden = 0;
-                    }
-                    if (empty($bedden)) {
-                        echo "Gelieve iets in te vullen bij beddengoed!";
-                        $bedden = 0;
-                    }
-                }
+                        }   
+                    } else {
+                        if ($bedden == "nee") {
+                            $bedden = 0;
+                        }                    
+                    }                    
+                } 
+                    
+                
+                
                 if (isset($_POST['bereken'])) {
                 $totaal_prijs = (($dagen*$prijs_huisje["price_p_p_p_n"]*$personen)+$bedden); 
                 }

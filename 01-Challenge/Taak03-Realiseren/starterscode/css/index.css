@@ -66,7 +66,7 @@ footer div {
     display: flex;
     line-height: 50px;
     align-items: center;
- 
+    
 }
 
 .form-control label{
@@ -145,3 +145,4 @@ p{
     text-shadow: #264653 2px 2px;
     -webkit-text-stroke: 1px #264653;
 }
+
